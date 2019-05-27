@@ -47,5 +47,5 @@ static_resources:
         hosts:
           -
             socket_address:
-              address: "backend_client"
+"
               port_value: 8083
