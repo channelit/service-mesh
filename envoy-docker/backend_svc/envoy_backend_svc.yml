@@ -1,0 +1,132 @@
+admin:
+  access_log_path: "/tmp/admin_access.log"
+  address: 
+    socket_address: 
+      address: "127.0.0.1"
+      port_value: 9901
+static_resources:
+  listeners:
+
+    -
+      name: "backend-svc-http-listener"
+      address:
+        socket_address:
+          address: "0.0.0.0"
+          port_value: 8081
+      filter_chains:
+        -
+          filters:
+            -
+              name: "envoy.http_connection_manager"
+              config:
+                stat_prefix: "ingress"
+                codec_type: "AUTO"
+                route_config:
+                  name: "backend-svc-http-route"
+                  virtual_hosts:
+                    -
+                      name: "backend-svc-http-route"
+                      domains:
+                        - "*"
+                      routes:
+                        -
+                          match:
+                            prefix: "/"
+                          route:
+                            cluster: "backend-svc"
+                http_filters:
+                  -
+                    name: "envoy.router"
+    -
+      name: "backend-util-http-listener"
+      address:
+        socket_address:
+          address: "0.0.0.0"
+          port_value: 8788
+      filter_chains:
+        -
+          filters:
+            -
+              name: "envoy.http_connection_manager"
+              config:
+                stat_prefix: "egress"
+                codec_type: "AUTO"
+                route_config:
+                  name: "backend-util-http-route"
+                  virtual_hosts:
+                    -
+                      name: "backend-util-http-route"
+                      domains:
+                        - "*"
+                      routes:
+                        -
+                          match:
+                            prefix: "/"
+                          route:
+                            cluster: "backend-util"
+                http_filters:
+                  -
+                    name: "envoy.router"
+
+    -
+      name: "backend-util-http-listener"
+      address:
+        socket_address:
+          address: "0.0.0.0"
+          port_value: 8791
+      filter_chains:
+        -
+          filters:
+            -
+              name: "envoy.http_connection_manager"
+              config:
+                stat_prefix: "egress"
+                codec_type: "AUTO"
+                route_config:
+                  name: "backend-util-http-route"
+                  virtual_hosts:
+                    -
+                      name: "backend-util-svc-http-route"
+                      domains:
+                        - "*"
+                      routes:
+                        -
+                          match:
+                            prefix: "/"
+                          route:
+                            cluster: "backend-client"
+                http_filters:
+                  -
+                    name: "envoy.router"                                
+  clusters:
+      -
+        name: "backend_svc"
+        connect_timeout: "0.25s"
+        type: "strict_dns"
+        lb_policy: "ROUND_ROBIN"
+        hosts:
+          -
+            socket_address:
+              address: "backend_svc"
+              port_value: 8081  
+      -
+        name: "backend_util"
+        connect_timeout: "0.25s"
+        type: "strict_dns"
+        lb_policy: "ROUND_ROBIN"
+        hosts:
+          -
+            socket_address:
+              address: "backend_util_envoy"
+              port_value: 9091
+
+      -
+        name: "backend_client"
+        connect_timeout: "0.25s"
+        type: "strict_dns"
+        lb_policy: "ROUND_ROBIN"
+        hosts:
+          -
+            socket_address:
+              address: "backend_client_envoy"
+              port_value: 9092
