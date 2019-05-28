@@ -6,17 +6,16 @@ admin:
       port_value: 9901
 static_resources:
   listeners:
-
-    -
+    - 
       name: "backend-client-http-listener"
       address:
         socket_address:
           address: "0.0.0.0"
           port_value: 8790
       filter_chains:
-        -
+        - 
           filters:
-            -
+            - 
               name: "envoy.http_connection_manager"
               config:
                 stat_prefix: "ingress"
@@ -24,28 +23,26 @@ static_resources:
                 route_config:
                   name: "backend-client-http-route"
                   virtual_hosts:
-                    -
+                    - 
                       name: "backend-client-http-route"
                       domains:
                         - "*"
                       routes:
-                        -
+                        - 
                           match:
                             prefix: "/"
                           route:
                             cluster: "backend_client"
                 http_filters:
-                  -
+                  - 
                     name: "envoy.router"
-    
-  clusters:
-      -
+  clusters :
+      - 
         name: "backend_client"
         connect_timeout: "0.25s"
         type: "strict_dns"
         lb_policy: "ROUND_ROBIN"
         hosts:
-          -
-            socket_address:
-"
+          - socket_address:
+              address: "backend_client"
               port_value: 8083

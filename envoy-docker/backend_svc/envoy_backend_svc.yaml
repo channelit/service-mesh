@@ -6,13 +6,12 @@ admin:
       port_value: 9901
 static_resources:
   listeners:
-
     -
       name: "backend-svc-http-listener"
       address:
         socket_address:
           address: "0.0.0.0"
-          port_value: 8081
+          port_value: 8786
       filter_chains:
         -
           filters:
@@ -33,7 +32,7 @@ static_resources:
                           match:
                             prefix: "/"
                           route:
-                            cluster: "backend-svc"
+                            cluster: "backend_svc"
                 http_filters:
                   -
                     name: "envoy.router"
@@ -63,13 +62,13 @@ static_resources:
                           match:
                             prefix: "/"
                           route:
-                            cluster: "backend-util"
+                            cluster: "backend_util"
                 http_filters:
                   -
                     name: "envoy.router"
 
     -
-      name: "backend-util-http-listener"
+      name: "backend-client-http-listener"
       address:
         socket_address:
           address: "0.0.0.0"
@@ -83,10 +82,10 @@ static_resources:
                 stat_prefix: "egress"
                 codec_type: "AUTO"
                 route_config:
-                  name: "backend-util-http-route"
+                  name: "backend-client-http-route"
                   virtual_hosts:
                     -
-                      name: "backend-util-svc-http-route"
+                      name: "backend-client-svc-http-route"
                       domains:
                         - "*"
                       routes:
@@ -94,7 +93,7 @@ static_resources:
                           match:
                             prefix: "/"
                           route:
-                            cluster: "backend-client"
+                            cluster: "backend_client"
                 http_filters:
                   -
                     name: "envoy.router"                                
@@ -118,8 +117,7 @@ static_resources:
           -
             socket_address:
               address: "backend_util_envoy"
-              port_value: 9091
-
+              port_value: 8789
       -
         name: "backend_client"
         connect_timeout: "0.25s"
@@ -129,4 +127,4 @@ static_resources:
           -
             socket_address:
               address: "backend_client_envoy"
-              port_value: 9092
+              port_value: 8790
