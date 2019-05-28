@@ -83,7 +83,7 @@ static_resources:
                           match:
                             prefix: "/"
                           route:
-                            cluster: "backend-util"
+                            cluster: "backend-client"
                 http_filters:
                   -
                     name: "envoy.router"
