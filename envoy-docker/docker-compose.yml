@@ -25,11 +25,11 @@ services:
       - "8081:8081"
     environment:
       - GRPC_SERVER_PORT=5051
-      - GRPC_CLIENT_HOST=backend-util-envoy
+      - GRPC_CLIENT_HOST=backend-svc-envoy
       - GRPC_CLIENT_PORT=5052
-      - JSON_CLIENT_HOST=backend-util-envoy
+      - JSON_CLIENT_HOST=backend-svc-envoy
       - JSON_SERVER_PORT=8081
-      - JSON_CLIENT_PORT=8789
+      - JSON_CLIENT_PORT=8788
       - JSON_CLIENT_ENDPOINT=client
 
   backend-util-envoy:
@@ -38,6 +38,7 @@ services:
       - ./backend_util/envoy_backend_util.yaml:/etc/envoy-config.yaml
     ports:
       - "8789:8789"
+      - "8793:8793"
     command: "/usr/local/bin/envoy -c /etc/envoy-config.yaml -l info --service-cluster 'backend-util' --service-node 'backend-util' --log-format '[METADATA][%Y-%m-%d %T.%e][%t][%l][%n] %v'"  
 
   backend-util:
@@ -46,11 +47,11 @@ services:
       - "8082:8082"
     environment:
       - GRPC_SERVER_PORT=5052
-      - GRPC_CLIENT_HOST=backend-client-envoy
+      - GRPC_CLIENT_HOST=backend-util-envoy
       - GRPC_CLIENT_PORT=5051
-      - JSON_CLIENT_HOST=backend-client-envoy
+      - JSON_CLIENT_HOST=backend-util-envoy
       - JSON_SERVER_PORT=8082
-      - JSON_CLIENT_PORT=8790
+      - JSON_CLIENT_PORT=8793
 
   backend-client-envoy:
     image: envoyproxy/envoy:latest
