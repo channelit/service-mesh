@@ -32,19 +32,19 @@ static_resources:
                           match: 
                             prefix: "/"
                           route:
-                            cluster: "backend_svc"
+                            cluster: "backend-svc"
                 http_filters:
                   - 
                     name: "envoy.router"
   clusters:
     - 
-      name: "backend_svc"
+      name: "backend-svc"
       connect_timeout: "0.25s"
       type: "strict_dns"
       lb_policy: "ROUND_ROBIN"
       hosts:
         - 
           socket_address: 
-            address: "backend_svc_envoy"
+            address: "backend-svc-envoy"
             port_value: 8786
     
