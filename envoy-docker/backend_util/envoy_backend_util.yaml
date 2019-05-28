@@ -32,7 +32,7 @@ static_resources:
                   config:
                     path: /dev/stdout
                     format: "[ACCESS_LOG][%START_TIME%] \"%REQ(:METHOD)% %REQ(X-ENVOY-ORIGINAL-PATH?:PATH)% %PROTOCOL%\" %RESPONSE_CODE% %RESPONSE_FLAGS% %BYTES_RECEIVED% %BYTES_SENT% %DURATION% %RESP(X-ENVOY-UPSTREAM-SERVICE-TIME)% \"%REQ(X-FORWARDED-FOR)%\" \"%REQ(USER-AGENT)%\" \"%REQ(X-REQUEST-ID)%\" \"%REQ(:AUTHORITY)%\" \"%UPSTREAM_HOST%\" \"%DOWNSTREAM_REMOTE_ADDRESS_WITHOUT_PORT%\"\n"
-                stat_prefix: "ingress_8786"
+                stat_prefix: "ingress_8788"
                 codec_type: "AUTO"
                 route_config:
                   name: "backend-util-http-route"
@@ -63,13 +63,13 @@ static_resources:
               name: "envoy.http_connection_manager"
               config:
                 tracing:
-                  operation_name: ingress
+                  operation_name: egress
                 access_log:
                 - name: envoy.file_access_log
                   config:
                     path: /dev/stdout
                     format: "[ACCESS_LOG][%START_TIME%] \"%REQ(:METHOD)% %REQ(X-ENVOY-ORIGINAL-PATH?:PATH)% %PROTOCOL%\" %RESPONSE_CODE% %RESPONSE_FLAGS% %BYTES_RECEIVED% %BYTES_SENT% %DURATION% %RESP(X-ENVOY-UPSTREAM-SERVICE-TIME)% \"%REQ(X-FORWARDED-FOR)%\" \"%REQ(USER-AGENT)%\" \"%REQ(X-REQUEST-ID)%\" \"%REQ(:AUTHORITY)%\" \"%UPSTREAM_HOST%\" \"%DOWNSTREAM_REMOTE_ADDRESS_WITHOUT_PORT%\"\n"
-                stat_prefix: "ingress_8786"
+                stat_prefix: "egress_8793"
                 codec_type: "AUTO"
                 route_config:
                   name: "backend-util-http-route"
