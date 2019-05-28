@@ -30,6 +30,7 @@ services:
       - JSON_CLIENT_HOST=backend-util-envoy
       - JSON_SERVER_PORT=8081
       - JSON_CLIENT_PORT=8789
+      - JSON_CLIENT_ENDPOINT=client
 
   backend-util-envoy:
     image: envoyproxy/envoy:latest
