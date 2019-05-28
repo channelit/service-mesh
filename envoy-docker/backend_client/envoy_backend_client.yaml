@@ -1,3 +1,9 @@
+tracing:
+  http:
+    name: envoy.zipkin
+    config:
+      collector_cluster: zipkin
+      collector_endpoint: "/api/v1/spans"
 admin:
   access_log_path: "/tmp/admin_access.log"
   address: 
@@ -18,7 +24,14 @@ static_resources:
             - 
               name: "envoy.http_connection_manager"
               config:
-                stat_prefix: "ingress"
+                tracing:
+                  operation_name: ingress
+                access_log:
+                - name: envoy.file_access_log
+                  config:
+                    path: /dev/stdout
+                    format: "[ACCESS_LOG][%START_TIME%] \"%REQ(:METHOD)% %REQ(X-ENVOY-ORIGINAL-PATH?:PATH)% %PROTOCOL%\" %RESPONSE_CODE% %RESPONSE_FLAGS% %BYTES_RECEIVED% %BYTES_SENT% %DURATION% %RESP(X-ENVOY-UPSTREAM-SERVICE-TIME)% \"%REQ(X-FORWARDED-FOR)%\" \"%REQ(USER-AGENT)%\" \"%REQ(X-REQUEST-ID)%\" \"%REQ(:AUTHORITY)%\" \"%UPSTREAM_HOST%\" \"%DOWNSTREAM_REMOTE_ADDRESS_WITHOUT_PORT%\"\n"
+                stat_prefix: "ingress_8786"
                 codec_type: "AUTO"
                 route_config:
                   name: "backend-client-http-route"
@@ -46,3 +59,13 @@ static_resources:
           - socket_address:
               address: "backend-client"
               port_value: 8083
+      - 
+        name: zipkin
+        connect_timeout: 0.25s
+        type: strict_dns
+        lb_policy: round_robin
+        hosts:
+          - 
+            socket_address:
+              address: zipkin
+              port_value: 9411
