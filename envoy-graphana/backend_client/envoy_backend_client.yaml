@@ -75,7 +75,7 @@ static_resources:
             socket_address:
               address: zipkin
               port_value: 9411
-     -
+      -
         name: "statsd-exporter"
         connect_timeout: "0.25s"
         type: "strict_dns"
