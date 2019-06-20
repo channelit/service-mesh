@@ -1,3 +1,6 @@
+# Custom ignored folders
+data
+
 # Compiled class file
 *.class
 

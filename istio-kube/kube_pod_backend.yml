@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: 2
+  selector: 
+    matchLabels:
+      name: backend
+  template:
+    metadata:
+      labels:
+        name: backend
+    spec:
+      containers:
+      - name: backend
+        image: grpc-svc:v1
+        env:
+          - name: GRPC_SERVER_PORT
+            value: "5051"
+          - name: backend-svc-envoy
+            value: "5051"
+          - name: GRPC_CLIENT_PORT
+            value: "5052"
+          - name: backend-svc-envoy
+            value: "8081"
+          - name: JSON_SERVER_PORT
+            value: "5051"
+          - name: JSON_CLIENT_PORT
+            value: "8788"
+          - name: JSON_CLIENT_ENDPOINT
+            value: client
+        ports:
+        - containerPort: 8081
+          name: svc-port
+          protocol: TCP
+      - name: envoy
+        image: envoyproxy/envoy:latest
+        imagePullPolicy: Never
+        ports:
+          - containerPort: 9901
+            protocol: TCP
+            name: envoy-admin
+          - containerPort: 8786
+            protocol: TCP
+            name: envoy-backend
+        volumeMounts:
+          - name: envoy-config-volume
+            mountPath: /etc/envoy-config/
+        command: ["/usr/local/bin/envoy"]
+        args: ["-c", "/etc/envoy-config/envoy_backend_client.yaml", "--v2-config-only", "-l", "info","--service-cluster","backend","--service-node","backend", "--log-format", "[METADATA][%Y-%m-%d %T.%e][%t][%l][%n] %v"]
+      volumes:
+        - name: envoy-config-volume
+          hostPath:
+            path: /Users/hp/workbench/projects/cit/service-mesh/istio-kube/backend_svc
+            type: Directory
