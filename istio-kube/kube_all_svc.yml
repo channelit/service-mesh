@@ -23,9 +23,9 @@ metadata:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: details-v1
+  name: backend-client-v1
   labels:
-    app: details
+    app: backend-client
     version: v1
 spec:
   replicas: 1
@@ -46,13 +46,21 @@ spec:
         imagePullPolicy: Never
         ports:
         - containerPort: 9080
-        environment:
-        - GRPC_SERVER_PORT=5053
-        - GRPC_CLIENT_HOST=backend-client-envoy
-        - GRPC_CLIENT_PORT=5052
-        - JSON_CLIENT_HOST=backend-client-envoy
-        - JSON_SERVER_PORT=8083
-        - JSON_CLIENT_PORT=8082
+        env:
+          - name: GRPC_SERVER_PORT
+            value: "5051"
+          - name: GRPC_CLIENT_HOST
+            value: "backend-svc-envoy"
+          - name: GRPC_CLIENT_PORT
+            value: "9080"
+          - name: JSON_CLIENT_HOST
+            value: "backend-svc-envoy"
+          - name: JSON_SERVER_PORT
+            value: "9080"
+          - name: JSON_CLIENT_PORT
+            value: "9080"
+          - name: JSON_CLIENT_ENDPOINT
+            value: status
 ---
 ##################################################################################################
 # Backend Util
@@ -102,13 +110,21 @@ spec:
         imagePullPolicy: Never
         ports:
         - containerPort: 9080
-        environment:
-        - GRPC_SERVER_PORT=5053
-        - GRPC_CLIENT_HOST=backend-client-envoy
-        - GRPC_CLIENT_PORT=5052
-        - JSON_CLIENT_HOST=backend-client-envoy
-        - JSON_SERVER_PORT=8083
-        - JSON_CLIENT_PORT=8082
+        env:
+          - name: GRPC_SERVER_PORT
+            value: "5051"
+          - name: GRPC_CLIENT_HOST
+            value: "backend-client"
+          - name: GRPC_CLIENT_PORT
+            value: "5051"
+          - name: JSON_CLIENT_HOST
+            value: "backend-client"
+          - name: JSON_SERVER_PORT
+            value: "9080"
+          - name: JSON_CLIENT_PORT
+            value: "9080"
+          - name: JSON_CLIENT_ENDPOINT
+            value: status
 ---
 ##################################################################################################
 # Backend Service
@@ -158,11 +174,19 @@ spec:
         imagePullPolicy: Never
         ports:
         - containerPort: 9080
-        environment:
-        - GRPC_SERVER_PORT=5053
-        - GRPC_CLIENT_HOST=backend-client-envoy
-        - GRPC_CLIENT_PORT=5052
-        - JSON_CLIENT_HOST=backend-client-envoy
-        - JSON_SERVER_PORT=8083
-        - JSON_CLIENT_PORT=8082
+        env:
+          - name: GRPC_SERVER_PORT
+            value: "5051"
+          - name: GRPC_CLIENT_HOST
+            value: "backend-util"
+          - name: GRPC_CLIENT_PORT
+            value: "5051"
+          - name: JSON_CLIENT_HOST
+            value: "backend-util"
+          - name: JSON_SERVER_PORT
+            value: "9080"
+          - name: JSON_CLIENT_PORT
+            value: "9080"
+          - name: JSON_CLIENT_ENDPOINT
+            value: client
 ---
