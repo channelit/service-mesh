@@ -28,3 +28,36 @@ kubectl -n kube-system describe secret kubernetes-dashboard-token-cwkp8
 
 Get All Tokens:
 kubectl -n kube-system describe secret
+
+######################
+##### GRAFANA #####
+#####################
+kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=grafana -o jsonpath='{.items[0].metadata.name}') 3000:3000 &
+
+
+
+#######################
+##### Kiali ###########
+#######################
+
+KIALI_USERNAME=$(read -p 'Kiali Username: ' uval && echo -n $uval | base64)
+KIALI_PASSPHRASE=$(read -sp 'Kiali Passphrase: ' pval && echo -n $pval | base64)
+
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kiali
+  namespace: $NAMESPACE
+  labels:
+    app: kiali
+type: Opaque
+data:
+  username: $KIALI_USERNAME
+  passphrase: $KIALI_PASSPHRASE
+EOF
+
+kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=kiali -o jsonpath='{.items[0].metadata.name}') 20001:20001
+
+http://localhost:20001/kiali/console 
+
