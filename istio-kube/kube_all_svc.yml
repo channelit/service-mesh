@@ -18,7 +18,7 @@ spec:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: backend-client
+  name: svc-backend-client
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -41,7 +41,7 @@ spec:
     spec:
       serviceAccountName: svc-backend-client
       containers:
-      - name: details
+      - name: backend-client
         image: grpc-svc:v1
         imagePullPolicy: Never
         ports:
@@ -50,11 +50,11 @@ spec:
           - name: GRPC_SERVER_PORT
             value: "5051"
           - name: GRPC_CLIENT_HOST
-            value: "backend-svc-envoy"
+            value: "backend-svc"
           - name: GRPC_CLIENT_PORT
             value: "9080"
           - name: JSON_CLIENT_HOST
-            value: "backend-svc-envoy"
+            value: "backend-svc"
           - name: JSON_SERVER_PORT
             value: "9080"
           - name: JSON_CLIENT_PORT
@@ -82,7 +82,7 @@ spec:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: backend-util
+  name: svc-backend-util
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -105,7 +105,7 @@ spec:
     spec:
       serviceAccountName: svc-backend-util
       containers:
-      - name: ratings
+      - name: backend-util
         image: grpc-svc:v1
         imagePullPolicy: Never
         ports:
@@ -188,5 +188,5 @@ spec:
           - name: JSON_CLIENT_PORT
             value: "9080"
           - name: JSON_CLIENT_ENDPOINT
-            value: client
+            value: status
 ---

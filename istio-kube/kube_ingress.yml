@@ -1,13 +1,13 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  name: service-mesh-gateway
+  name: micro-service-mesh-gateway
 spec:
   selector:
     istio: ingressgateway # use istio default controller
   servers:
   - port:
-      number: 8080
+      number: 80
       name: http
       protocol: HTTP
     hosts:
@@ -16,12 +16,12 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: service-mesh
+  name: micro-service-mesh
 spec:
   hosts:
   - "*"
   gateways:
-  - service-mesh-gateway
+  - micro-service-mesh-gateway
   http:
   - match:
     - uri:
