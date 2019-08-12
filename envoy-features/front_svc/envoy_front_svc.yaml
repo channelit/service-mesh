@@ -55,12 +55,14 @@ static_resources:
                           route:
                             cluster: "backend-svc"
                 http_filters:
+                  -
+                    name: envoy.router
                   - 
                     name: envoy.filters.http.jwt_authn
                     config:
                       providers:
-                        keycloak-jwt:
-                          issuer: http://keycloak-jwt:8080/auth/realms/envoy
+                        keycloak:
+                          issuer: http://localhost:8080/auth/realms/envoy
                           remote_jwks:
                             http_uri:
                               uri: http://keycloak-jwt:8080/auth/realms/envoy/protocol/openid-connect/certs
@@ -73,7 +75,7 @@ static_resources:
                         match:
                           prefix: "/"
                         requires:
-                          provider_name: "keycloak-jwt"
+                          provider_name: "keycloak"
   clusters:
     - 
       name: "keycloak-jwt"
