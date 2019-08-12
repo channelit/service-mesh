@@ -1,7 +1,14 @@
 
-## URLs
+kubectl apply -f install/kubernetes/istio-demo.yaml
 
-http://localhost:16686
+kubectl apply -f kube_all_svc.yml
+kubectl apply -f kube_httpbin.yml
+kubectl apply -f kube_ingress.yml
+kubectl apply -f kube_rules_all.yml
+
+
+http://localhost/status
+
 
 
 ![Simple Sidecar Proxy](img/sidecar-proxy-simple.svg)
@@ -34,6 +41,7 @@ kubectl -n kube-system describe secret
 #####################
 kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=grafana -o jsonpath='{.items[0].metadata.name}') 3000:3000 &
 
+http://localhost:3000/
 
 
 #######################
@@ -57,7 +65,7 @@ data:
   passphrase: $KIALI_PASSPHRASE
 EOF
 
-kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=kiali -o jsonpath='{.items[0].metadata.name}') 20001:20001
+kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=kiali -o jsonpath='{.items[0].metadata.name}') 20001:20001 &
 
 http://localhost:20001/kiali/console 
 

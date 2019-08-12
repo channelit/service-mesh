@@ -75,7 +75,6 @@ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=gr
 
 ### KIALI ###
 
-
 helm template \
     --set kiali.enabled=true \
     --set "kiali.dashboard.jaegerURL=http://jaeger-query:16686" \
