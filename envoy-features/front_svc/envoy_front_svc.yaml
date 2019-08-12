@@ -56,8 +56,35 @@ static_resources:
                             cluster: "backend-svc"
                 http_filters:
                   - 
-                    name: "envoy.router"
+                    name: envoy.filters.http.jwt_authn
+                    config:
+                      providers:
+                        keycloak-jwt:
+                          issuer: http://keycloak-jwt:8080/auth/realms/envoy
+                          remote_jwks:
+                            http_uri:
+                              uri: http://keycloak-jwt:8080/auth/realms/envoy/protocol/openid-connect/certs
+                              cluster: keycloak-jwt
+                          from_headers:
+                          - name: Authorization
+                            value_prefix: "Bearer "
+                      rules:
+                      - 
+                        match:
+                          prefix: "/"
+                        requires:
+                          provider_name: "keycloak-jwt"
   clusters:
+    - 
+      name: "keycloak-jwt"
+      connect_timeout: "0.25s"
+      type: "strict_dns"
+      lb_policy: "ROUND_ROBIN"
+      hosts:
+        - 
+          socket_address: 
+            address: "keycloak-jwt"
+            port_value: 8080
     - 
       name: "backend-svc"
       connect_timeout: "0.25s"

@@ -117,13 +117,14 @@ services:
       - URL_ENDPOINT=client
     command: "locust -f /locust.py"
 
-  keycloak:
+  keycloak-jwt:
     image: jboss/keycloak
     volumes:
-      - ./keycloak/keycloak.json:/keycloak.json
+      - ./keycloak/keycloak-realm.json:/keycloak-realm.json
     ports:
       - "8090:8080"
     environment:
       - KEYCLOAK_USER=admin
       - KEYCLOAK_PASSWORD=admin
       - DB_VENDOR=h2
+      - KEYCLOAK_IMPORT=/keycloak-realm.json
