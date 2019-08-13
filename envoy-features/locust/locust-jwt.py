@@ -17,14 +17,6 @@ class SubscriberTasks(TaskSet):
         payload = "username=user&password=user&grant_type=password&client_id=envoy"
         headers = {
             'Content-Type': "application/x-www-form-urlencoded",
-            'User-Agent': "PostmanRuntime/7.15.2",
-            'Accept': "*/*",
-            'Cache-Control': "no-cache",
-            'Host': "localhost:8080",
-            'Accept-Encoding': "gzip, deflate",
-            'Content-Length': "63",
-            'Connection': "keep-alive",
-            'cache-control': "no-cache"
         }
         client = HttpSession(base_url=os.environ.get("JWT_URL", "http://localhost:8080"))
         response = client.post('/auth/realms/envoy/protocol/openid-connect/token',
