@@ -31,17 +31,14 @@ class SubscriberTasks(TaskSet):
                                payload,
                                headers=headers)
         self.auth_token = "Bearer " + json.loads(response.text)['access_token']
-        print(self.auth_token)
 
     @task(1)
     def call_client(self):
-        response = self.client.get("/client", headers={'Authorization': self.auth_token})
-        print(response.text)
+        self.client.get("/client", headers={'Authorization': self.auth_token})
 
     @task(2)
     def call_status(self):
-        response = self.client.get("/status", headers={'Authorization': self.auth_token})
-        print(response.text)
+        self.client.get("/status", headers={'Authorization': self.auth_token})
 
 
 class ServiceUser(HttpLocust):

@@ -108,7 +108,7 @@ services:
   locust:
     image: cithub/locust:latest
     volumes:
-      - ./locust/locust.py:/locust.py
+      - ./locust/locust-jwt.py:/locust.py
     ports:
       - "8089:8089"
     environment:
