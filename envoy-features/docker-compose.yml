@@ -114,7 +114,6 @@ services:
     environment:
       - URL_HOST=front-envoy
       - URL_PORT=80
-      - URL_ENDPOINT=client
       - JWT_URL=http://keycloak-jwt:8080
     command: "locust -f /locust.py"
 

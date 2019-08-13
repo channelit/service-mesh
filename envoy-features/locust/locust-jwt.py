@@ -26,11 +26,13 @@ class SubscriberTasks(TaskSet):
 
     @task(1)
     def call_client(self):
-        self.client.get("/client", headers={'Authorization': self.auth_token})
+        response = self.client.get("client", headers={'Authorization': self.auth_token})
+        print(self.auth_token)
+        print(response.text)
 
     @task(2)
     def call_status(self):
-        self.client.get("/status", headers={'Authorization': self.auth_token})
+        self.client.get("status", headers={'Authorization': self.auth_token})
 
 
 class ServiceUser(HttpLocust):
