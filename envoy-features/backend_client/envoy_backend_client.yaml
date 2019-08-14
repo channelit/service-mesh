@@ -52,6 +52,10 @@ static_resources:
                             prefix: "/"
                           route:
                             cluster: "backend-client"
+                            retry_policy:
+                              retry_on: "5xx"
+                              num_retries: 300
+                              per_try_timeout_ms: 5000
                 http_filters:
                   - 
                     name: "envoy.router"
