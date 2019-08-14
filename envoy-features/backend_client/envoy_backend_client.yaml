@@ -65,6 +65,11 @@ static_resources:
         connect_timeout: "0.25s"
         type: "strict_dns"
         lb_policy: "ROUND_ROBIN"
+        circuit_breakers:
+          thresholds:
+            max_connections: 1
+            max_pending_requests: 1
+            max_requests: 1
         hosts:
           - socket_address:
               address: "backend-client"
