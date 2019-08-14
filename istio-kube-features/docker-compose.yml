@@ -6,7 +6,7 @@ services:
     volumes:
       - ./front_svc/envoy_front_svc.yaml:/etc/envoy-config.yaml
     ports:
-      - "8090:80"
+      - "9090:80"
       - "9901:9901"
     command: "/usr/local/bin/envoy -c /etc/envoy-config.yaml -l info --service-cluster 'front-svc' --service-node 'front-svc' --log-format '[METADATA][%Y-%m-%d %T.%e][%t][%l][%n] %v'"
 
@@ -74,7 +74,7 @@ services:
       - JSON_CLIENT_PORT=8082
       - STATUS_LATENCY_SECONDS=2
       - CLIENT_LATENCY_SECONDS=2
-      
+
   zipkin:
     image: jaegertracing/all-in-one
     environment:
@@ -82,51 +82,3 @@ services:
     ports:
       - 9411:9411
       - 16686:16686
-
-  statsd_exporter:
-    image: prom/statsd-exporter:latest
-    ports:
-    - "9125:9125"
-    - "9102:9102"
-
-  prometheus:
-    image: prom/prometheus
-    volumes:
-      - ./prometheus/config.yaml:/etc/prometheus.yaml
-    ports:
-    - "9090:9090"
-    command: "--config.file=/etc/prometheus.yaml"
-
-  grafana:
-    image: grafana/grafana
-    volumes:
-      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
-      - ./grafana/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
-      - ./grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/dashboard.yaml
-      - ./grafana/dashboard.json:/etc/grafana/provisioning/dashboards/dashboard.json
-    ports:
-    - "3001:3000"
-
-  locust:
-    image: cithub/locust:latest
-    volumes:
-      - ./locust/locust-jwt.py:/locust.py
-    ports:
-      - "8089:8089"
-    environment:
-      - URL_HOST=front-envoy
-      - URL_PORT=80
-      - JWT_URL=http://keycloak-jwt:8080
-    command: "locust -f /locust.py"
-
-  keycloak-jwt:
-    image: jboss/keycloak
-    volumes:
-      - ./keycloak/keycloak-realm.json:/keycloak-realm.json
-    ports:
-      - "8080:8080"
-    environment:
-      - KEYCLOAK_USER=admin
-      - KEYCLOAK_PASSWORD=admin
-      - DB_VENDOR=h2
-      - KEYCLOAK_IMPORT=/keycloak-realm.json

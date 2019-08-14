@@ -1,0 +1,192 @@
+##################################################################################################
+# Backend Client
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-client
+  labels:
+    app: backend-client
+    service: backend-client
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: backend-client
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: svc-backend-client
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-client-v1
+  labels:
+    app: backend-client
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-client
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: backend-client
+        version: v1
+    spec:
+      serviceAccountName: svc-backend-client
+      containers:
+      - name: backend-client
+        image: grpc-svc:v1
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 9080
+        env:
+          - name: GRPC_SERVER_PORT
+            value: "5051"
+          - name: GRPC_CLIENT_HOST
+            value: "backend-svc"
+          - name: GRPC_CLIENT_PORT
+            value: "9080"
+          - name: JSON_CLIENT_HOST
+            value: "backend-svc"
+          - name: JSON_SERVER_PORT
+            value: "9080"
+          - name: JSON_CLIENT_PORT
+            value: "9080"
+          - name: JSON_CLIENT_ENDPOINT
+            value: status
+---
+##################################################################################################
+# Backend Util
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-util
+  labels:
+    app: backend-util
+    service: backend-util
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: backend-util
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: svc-backend-util
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-util-v1
+  labels:
+    app: backend-util
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-util
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: backend-util
+        version: v1
+    spec:
+      serviceAccountName: svc-backend-util
+      containers:
+      - name: backend-util
+        image: grpc-svc:v1
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 9080
+        env:
+          - name: GRPC_SERVER_PORT
+            value: "5051"
+          - name: GRPC_CLIENT_HOST
+            value: "backend-client"
+          - name: GRPC_CLIENT_PORT
+            value: "5051"
+          - name: JSON_CLIENT_HOST
+            value: "backend-client"
+          - name: JSON_SERVER_PORT
+            value: "9080"
+          - name: JSON_CLIENT_PORT
+            value: "9080"
+          - name: JSON_CLIENT_ENDPOINT
+            value: status
+---
+##################################################################################################
+# Backend Service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-svc
+  labels:
+    app: backend-svc
+    service: backend-svc
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: backend-svc
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: svc-backend-svc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-svc-v1
+  labels:
+    app: backend-svc
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-svc
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: backend-svc
+        version: v1
+    spec:
+      serviceAccountName: svc-backend-svc
+      containers:
+      - name: backend-svc
+        image: grpc-svc:v1
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 9080
+        env:
+          - name: GRPC_SERVER_PORT
+            value: "5051"
+          - name: GRPC_CLIENT_HOST
+            value: "backend-util"
+          - name: GRPC_CLIENT_PORT
+            value: "5051"
+          - name: JSON_CLIENT_HOST
+            value: "backend-util"
+          - name: JSON_SERVER_PORT
+            value: "9080"
+          - name: JSON_CLIENT_PORT
+            value: "9080"
+          - name: JSON_CLIENT_ENDPOINT
+            value: client
+---
