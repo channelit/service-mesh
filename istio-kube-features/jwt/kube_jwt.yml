@@ -1,0 +1,15 @@
+apiVersion: "authentication.istio.io/v1alpha1"
+kind: "Policy"
+metadata:
+  name: "service-mesh"
+spec:
+  targets:
+  - name: httpbin
+    version: v1
+  peers:
+  - mtls:
+  origins:
+  - jwt:
+      issuer: "http://localhost:8080/auth/realms/envoy"
+      jwksUri: "http://localhost:8080/auth/realms/envoy/protocol/openid-connect/certs"
+  principalBinding: USE_ORIGIN

@@ -1,0 +1,50 @@
+#################################################################################################
+# Locust
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: locust
+  labels:
+    app: locust
+spec:
+  ports:
+    - port: 8089
+      targetPort: locust
+      protocol: TCP
+      name: locust
+  selector:
+    app: locust
+  type: LoadBalancer
+----
+apiVersion: "extensions/v1beta1"
+kind: "Deployment"
+metadata:
+  name: locust-master
+  labels:
+    name: locust-master
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: locust-master
+  template:
+    metadata:
+      labels:
+        app: locust-master
+    spec:
+      containers:
+        - name: locust-master
+          image: cithub/locust:latest
+          imagePullPolicy: Never
+          env:
+            - name: URL_HOST
+              value: front-envoy
+            - name: URL_PORT
+              value: 80
+            - name: JWT_URL
+              value: http://keycloak-jwt:8080
+          ports:
+            - name: locust
+              containerPort: 8089
+              protocol: TCP

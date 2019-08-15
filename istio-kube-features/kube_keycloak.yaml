@@ -1,0 +1,54 @@
+##################################################################################################
+# Keycloak
+##################################################################################################
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: keycloak
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: kc
+  namespace: keycloak
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: keycloak
+    spec:
+      containers:
+        - name: keycoak
+          image: jboss/keycloak:latest
+          imagePullPolicy: never
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: KEYCLOAK_USER
+              value: admin
+            - name: 
+              value: admin
+            - name: DB_VENDOR
+              value: h2
+            - name: KEYCLOAK_IMPORT
+              value: /keycloak-realm.json
+          args:
+            - -b=0.0.0.0
+            - -bmanagement=0.0.0.0
+            - --server-config=standalone-ha.xml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak
+  namespace: keycloak
+spec:
+  ports:
+    - port: 8080
+      name: http
+  selector:
+    app: keycloak
+  type: NodePort

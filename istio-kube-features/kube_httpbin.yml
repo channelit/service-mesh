@@ -26,7 +26,6 @@ spec:
     spec:
       containers:
       - image: docker.io/kennethreitz/httpbin
-        imagePullPolicy: Never
         name: httpbin
         ports:
         - containerPort: 80
