@@ -7,7 +7,7 @@ kubectl apply -f kube_httpbin.yml
 kubectl apply -f kube_ingress.yml
 kubectl apply -f kube_rules_all.yml
 ```
-> URL:<http://localhost/status>
+><http://localhost/status>
 
 ![Simple Sidecar Proxy](img/sidecar-proxy-simple.svg)
 
@@ -18,7 +18,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/a
 
 kubectl proxy
 ```
-> URL:<http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login>
+><http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login>
 
 #### Login:
 ``` shell
@@ -39,7 +39,7 @@ kubectl -n kube-system describe secret
 ``` shell
 kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=grafana -o jsonpath='{.items[0].metadata.name}') 3000:3000 &
 ```
-> URL:<http://localhost:3000/>
+><http://localhost:3000/>
 
 ### Kiali
 ``` shell
@@ -62,4 +62,4 @@ EOF
 
 kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=kiali -o jsonpath='{.items[0].metadata.name}') 20001:20001 &
 ```
-> URL:<http://localhost:20001/kiali/console>
+><http://localhost:20001/kiali/console>
