@@ -20,19 +20,17 @@ kubectl proxy
 ```
 ><http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login>
 
-#### Login:
+#### Login token for dashboard:
 ``` shell
--- Get Tokan
+Commands below are for reference only to help with extracting token.
+
 kubectl -n kube-system get secret
 
 kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | awk '/^deployment-controller-token-/{print $1}') | awk '$1=="token:"{print $2}'
 
--- Get Token:
-kubectl -n kube-system describe secret kubernetes-dashboard-token-cwkp8
+kubectl -n kube-system describe secret <token_id>
 
--- Get All Tokens:
 kubectl -n kube-system describe secret
-
 ```
 
 ### Grafana

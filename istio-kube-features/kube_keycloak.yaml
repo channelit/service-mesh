@@ -7,48 +7,66 @@ kind: Namespace
 metadata:
   name: keycloak
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kc
+  name: keycloak
   namespace: keycloak
+  labels:
+    name: keycloak
+    app: keycloak
 spec:
-  replicas: 3
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak
   template:
     metadata:
+      namespace: keycloak
+      name: keycloak
       labels:
         app: keycloak
+        name: keycloak
     spec:
       containers:
-        - name: keycoak
-          image: jboss/keycloak:latest
-          imagePullPolicy: never
-          ports:
-            - name: http
-              containerPort: 8080
-          env:
-            - name: KEYCLOAK_USER
-              value: admin
-            - name: 
-              value: admin
-            - name: DB_VENDOR
-              value: h2
-            - name: KEYCLOAK_IMPORT
-              value: /keycloak-realm.json
-          args:
-            - -b=0.0.0.0
-            - -bmanagement=0.0.0.0
-            - --server-config=standalone-ha.xml
+      - name: keycoak
+        image: jboss/keycloak:latest
+        imagePullPolicy: Never
+        env:
+          - name: KEYCLOAK_USER
+            value: admin
+          - name: KEYCLOAK_PASSWORD
+            value: admin
+          - name: DB_VENDOR
+            value: h2
+          - name: KEYCLOAK_IMPORT
+            value: /keycloak/keycloak-realm.json
+          - name: PROXY_ADDRESS_FORWARDING
+            value: "true"
+        volumeMounts:
+          - mountPath: /keycloak
+            name: keycloak-volume
+        ports:
+          - containerPort: 0880
+            protocol: TCP
+      volumes:
+        - name: keycloak-volume
+          hostPath:
+            path: /Users/hardikpatel/workbench/projects/cit/service-mesh/istio-kube-features/keycloak
+            type: Directory
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: keycloak
   namespace: keycloak
+  labels:
+    name: keycloak
 spec:
   ports:
-    - port: 8080
-      name: http
+  - port: 8080
+    targetPort: 8080
+    nodePort: 30090
   selector:
-    app: keycloak
+    name: keycloak
   type: NodePort
