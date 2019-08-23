@@ -70,3 +70,11 @@ spec:
   selector:
     name: keycloak
   type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak
+spec:
+  type: ExternalName
+  externalName: keycloak.keycloak.svc.cluster.local

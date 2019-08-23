@@ -39,7 +39,7 @@ spec:
           - name: URL_PORT
             value: "80"
           - name: JWT_URL
-            value: http://keycloak:8080
+            value: http://keycloak.keycloak.svc.cluster.local:8080
         command: ["locust"]
         args: ["-f", "/locust.py"]
         volumeMounts:
@@ -69,3 +69,11 @@ spec:
   selector:
     name: locust
   type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: locust
+spec:
+  type: ExternalName
+  externalName: locust.locust.svc.cluster.local
