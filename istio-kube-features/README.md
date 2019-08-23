@@ -1,5 +1,6 @@
 
 ### Steps
+##### from <https://istio.io/docs/setup/kubernetes/install/kubernetes/>
 ``` shell
 kubectl apply -f install/kubernetes/istio-demo.yaml
 kubectl apply -f kube_all_svc.yml

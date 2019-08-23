@@ -1,50 +1,71 @@
 #################################################################################################
 # Locust
 ##################################################################################################
+---
 apiVersion: v1
-kind: Service
+kind: Namespace
 metadata:
   name: locust
-  labels:
-    app: locust
-spec:
-  ports:
-    - port: 8089
-      targetPort: locust
-      protocol: TCP
-      name: locust
-  selector:
-    app: locust
-  type: LoadBalancer
-----
-apiVersion: "extensions/v1beta1"
-kind: "Deployment"
+---
+---
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: locust-master
+  name: locust
+  namespace: locust
   labels:
-    name: locust-master
+    name: locust
+    app: locust
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: locust-master
+      app: locust
   template:
     metadata:
+      namespace: locust
+      name: locust
       labels:
-        app: locust-master
+        app: locust
+        name: locust
     spec:
       containers:
-        - name: locust-master
-          image: cithub/locust:latest
-          imagePullPolicy: Never
-          env:
-            - name: URL_HOST
-              value: front-envoy
-            - name: URL_PORT
-              value: 80
-            - name: JWT_URL
-              value: http://keycloak-jwt:8080
-          ports:
-            - name: locust
-              containerPort: 8089
-              protocol: TCP
+      - name: locust
+        image: cithub/locust:latest
+        imagePullPolicy: Never
+        env:
+          - name: URL_HOST
+            value: backend-client-v1
+          - name: URL_PORT
+            value: "80"
+          - name: JWT_URL
+            value: "http://keycloak:8080"
+        command: ["locust"]
+        args: ["-f", "/locust.py"]
+        volumeMounts:
+          - mountPath: /locust.py
+            name: locust-volume
+        ports:
+          - containerPort: 8089
+            protocol: TCP
+      volumes:
+        - name: locust-volume
+          hostPath:
+            path: /Users/hardikpatel/workbench/projects/cit/service-mesh/istio-kube-features/locust/locust-jwt.py
+            type: File
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: locust
+  namespace: locust
+  labels:
+    name: locust
+spec:
+  ports:
+  - port: 8089
+    targetPort: 8089
+    nodePort: 30089
+  selector:
+    name: locust
+  type: NodePort

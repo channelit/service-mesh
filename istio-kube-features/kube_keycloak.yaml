@@ -47,7 +47,7 @@ spec:
           - mountPath: /keycloak
             name: keycloak-volume
         ports:
-          - containerPort: 0880
+          - containerPort: 8080
             protocol: TCP
       volumes:
         - name: keycloak-volume
