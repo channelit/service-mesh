@@ -35,9 +35,9 @@ spec:
         imagePullPolicy: Never
         env:
           - name: URL_HOST
-            value: backend-client-v1
+            value: backend-svc.default.svc.cluster.local
           - name: URL_PORT
-            value: "80"
+            value: "9080"
           - name: JWT_URL
             value: http://keycloak.keycloak.svc.cluster.local:8080
         command: ["locust"]

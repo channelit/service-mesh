@@ -54,7 +54,7 @@ spec:
           - name: GRPC_CLIENT_PORT
             value: "9080"
           - name: JSON_CLIENT_HOST
-            value: "backend-svc"
+            value: "backend-svc.default.svc.cluster.local"
           - name: JSON_SERVER_PORT
             value: "9080"
           - name: JSON_CLIENT_PORT
@@ -118,7 +118,7 @@ spec:
           - name: GRPC_CLIENT_PORT
             value: "5051"
           - name: JSON_CLIENT_HOST
-            value: "backend-client"
+            value: "backend-client.default.svc.cluster.local"
           - name: JSON_SERVER_PORT
             value: "9080"
           - name: JSON_CLIENT_PORT
@@ -182,7 +182,7 @@ spec:
           - name: GRPC_CLIENT_PORT
             value: "5051"
           - name: JSON_CLIENT_HOST
-            value: "backend-util"
+            value: "backend-util.default.svc.cluster.local"
           - name: JSON_SERVER_PORT
             value: "9080"
           - name: JSON_CLIENT_PORT

@@ -1,0 +1,14 @@
+apiVersion: "authentication.istio.io/v1alpha1"
+kind: "Policy"
+metadata:
+  name: "jwt"
+spec:
+  targets:
+  - name: backend-svc
+  peers:
+  - mtls:
+  origins:
+  - jwt:
+      issuer: "http:///localhost:30090/auth/realms/envoy"
+      jwksUri: "http://keycloak.keycloak.svc.cluster.local:8080"
+  principalBinding: USE_ORIGIN

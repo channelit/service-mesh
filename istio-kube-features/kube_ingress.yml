@@ -30,6 +30,6 @@ spec:
         prefix: /client
     route:
     - destination:
-        host: backend-svc
+        host: backend-svc.default.svc.cluster.local
         port:
           number: 9080
