@@ -4,6 +4,10 @@ metadata:
   name: backend-svc
 spec:
   host: backend-svc.default.svc.cluster.local
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 1
   subsets:
   - name: v1
     labels:
@@ -15,10 +19,16 @@ metadata:
   name: backend-util
 spec:
   host: backend-util.default.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      simple: ROUND_ROBIN
   subsets:
   - name: v1
     labels:
       version: v1
+  - name: v2
+    labels:
+      version: v2
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule

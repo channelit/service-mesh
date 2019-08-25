@@ -3,7 +3,7 @@ kind: DestinationRule
 metadata:
   name: backend-svc
 spec:
-  host: backend-svc
+  host: backend-svc.default.svc.cluster.local
   subsets:
   - name: v1
     labels:
@@ -14,7 +14,7 @@ kind: DestinationRule
 metadata:
   name: backend-util
 spec:
-  host: backend-util
+  host: backend-util.default.svc.cluster.local
   trafficPolicy:
     loadBalancer:
       simple: ROUND_ROBIN
@@ -31,7 +31,7 @@ kind: DestinationRule
 metadata:
   name: backend-client
 spec:
-  host: backend-client
+  host: backend-client.default.svc.cluster.local
   subsets:
   - name: v1
     labels:

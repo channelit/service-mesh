@@ -1,12 +1,10 @@
 apiVersion: "authentication.istio.io/v1alpha1"
 kind: "Policy"
 metadata:
-  name: "jwt"
+  name: "ingressgateway-jwt-policy"
 spec:
   targets:
-  - name: backend-svc
-  peers:
-  - mtls:
+  - name: istio-ingressgateway
   origins:
   - jwt:
       issuer: "http:///localhost:30090/auth/realms/envoy"
