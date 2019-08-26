@@ -1,0 +1,44 @@
+##################################################################################################
+# Backend Util
+##################################################################################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-util-v2
+  labels:
+    app: backend-util
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-util
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: backend-util
+        version: v2
+    spec:
+      serviceAccountName: svc-backend-util
+      containers:
+      - name: backend-util
+        image: grpc-svc:v1
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 9080
+        env:
+          - name: GRPC_SERVER_PORT
+            value: "5051"
+          - name: GRPC_CLIENT_HOST
+            value: "backend-client"
+          - name: GRPC_CLIENT_PORT
+            value: "5051"
+          - name: JSON_CLIENT_HOST
+            value: "backend-client.default.svc.cluster.local"
+          - name: JSON_SERVER_PORT
+            value: "9080"
+          - name: JSON_CLIENT_PORT
+            value: "9080"
+          - name: JSON_CLIENT_ENDPOINT
+            value: status
