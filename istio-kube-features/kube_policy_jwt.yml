@@ -1,34 +1,15 @@
-apiVersion: "authentication.istio.io/v1alpha1"
-kind: "Policy"
+apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
 metadata:
-  name: "default"
-  namespace: "default"
-spec:
-  peers:
-  - mtls: {}
----
-apiVersion: "networking.istio.io/v1alpha3"
-kind: "DestinationRule"
-metadata:
-  name: "default"
-  namespace: "default"
-spec:
-  host: "*.default.svc.cluster.local"
-  trafficPolicy:
-    tls:
-      mode: ISTIO_MUTUAL
----
-apiVersion: "authentication.istio.io/v1alpha1"
-kind: "Policy"
-metadata:
-  name: "service-mesh-jwt-policy"
+  name: ingressgateway
+  namespace: istio-system
 spec:
   targets:
-  - name: backend-svc
+  - name: istio-ingressgateway
   peers:
-  - mtls: {}
+  - mtls:
   origins:
   - jwt:
-      issuer: "http:///localhost:30090/auth/realms/envoy"
-      jwksUri: "http://keycloak.keycloak.svc.cluster.local:8080"
+      issuer: "http://localhost:30090/auth/realms/envoy"
+      jwksUri: "http://keycloak.keycloak.svc.cluster.local:8080/auth/realms/envoy/protocol/openid-connect/certs"
   principalBinding: USE_ORIGIN
