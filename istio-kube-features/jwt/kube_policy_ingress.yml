@@ -1,0 +1,18 @@
+apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
+metadata:
+  name: ingressgateway
+  namespace: istio-system
+spec:
+  targets:
+  - name: istio-ingressgateway
+  peers:
+  - mtls: {}
+  origins:
+  - jwt:
+      issuer: "http://localhost:30090/auth/realms/envoy"
+      jwksUri: "http://keycloak.keycloak.svc.cluster.local:8080/auth/realms/envoy/protocol/openid-connect/certs"
+  - jwt:
+      issuer: "http://keycloak.keycloak.svc.cluster.local:8080/auth/realms/envoy"
+      jwksUri: "http://keycloak.keycloak.svc.cluster.local:8080/auth/realms/envoy/protocol/openid-connect/certs"
+  principalBinding: USE_ORIGIN
