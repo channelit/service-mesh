@@ -5,6 +5,8 @@ metadata:
 spec:
   host: backend-svc.default.svc.cluster.local
   trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
     connectionPool:
       tcp:
         maxConnections: 1

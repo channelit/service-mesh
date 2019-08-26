@@ -8,7 +8,7 @@ spec:
   servers:
   - port:
       number: 80
-      name: http
+      name: http-svc
       protocol: HTTP
     hosts:
     - "*"

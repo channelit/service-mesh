@@ -1,10 +1,32 @@
 apiVersion: "authentication.istio.io/v1alpha1"
 kind: "Policy"
 metadata:
-  name: "ingressgateway-jwt-policy"
+  name: "default"
+  namespace: "default"
+spec:
+  peers:
+  - mtls: {}
+---
+apiVersion: "networking.istio.io/v1alpha3"
+kind: "DestinationRule"
+metadata:
+  name: "default"
+  namespace: "default"
+spec:
+  host: "*.default.svc.cluster.local"
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+---
+apiVersion: "authentication.istio.io/v1alpha1"
+kind: "Policy"
+metadata:
+  name: "service-mesh-jwt-policy"
 spec:
   targets:
-  - name: istio-ingressgateway
+  - name: backend-svc
+  peers:
+  - mtls: {}
   origins:
   - jwt:
       issuer: "http:///localhost:30090/auth/realms/envoy"

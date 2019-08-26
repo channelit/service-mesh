@@ -5,18 +5,27 @@
 kubectl apply -f install/kubernetes/istio-demo.yaml
 kubectl label namespace default istio-injection=enabled
 kubectl apply -f kube_all_svc.yml
-kubectl apply -f kube_httpbin.yml
+---kubectl apply -f kube_httpbin.yml
 kubectl apply -f kube_ingress.yml
 kubectl apply -f kube_rules_all.yml
 ```
 ><http://localhost/status>
 
+### Keycloak
+``` shell
+kubectl apply -f kube_keycloak.yml
+```
+
+### Locust
+``` shell
+kubectl apply -f kube_locust.yml
+```
 ![Simple Sidecar Proxy](img/sidecar-proxy-simple.svg)
 
 
 ### Kubernetes Dashboard
 ``` shell
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended/kubernetes-dashboard.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta1/aio/deploy/recommended.yaml
 
 kubectl proxy
 ```
