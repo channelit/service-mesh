@@ -24,13 +24,13 @@ class SubscriberTasks(TaskSet):
                                headers=headers)
         self.auth_token = "Bearer " + json.loads(response.text)['access_token']
 
-    @task(1)
+    @task(2)
     def call_client(self):
         response = self.client.get("client", headers={'Authorization': self.auth_token})
         print(self.auth_token)
         print(response.text)
 
-    @task(2)
+    @task(1)
     def call_status(self):
         self.client.get("status", headers={'Authorization': self.auth_token})
 
