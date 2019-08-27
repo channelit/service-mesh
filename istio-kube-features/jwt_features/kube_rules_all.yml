@@ -18,6 +18,18 @@ metadata:
   name: backend-util
 spec:
   host: backend-util.default.svc.cluster.local
+  trafficPolicy:
+  connectionPool:
+    tcp:
+      maxConnections: 1
+    http:
+      http1MaxPendingRequests: 1
+      maxRequestsPerConnection: 1
+  outlierDetection:
+    consecutiveErrors: 1
+    interval: 1s
+    baseEjectionTime: 3m
+    maxEjectionPercent: 100
   subsets:
   - name: v1
     labels:
@@ -29,6 +41,18 @@ metadata:
   name: backend-client
 spec:
   host: backend-client.default.svc.cluster.local
+  trafficPolicy:
+  connectionPool:
+    tcp:
+      maxConnections: 1
+    http:
+      http1MaxPendingRequests: 1
+      maxRequestsPerConnection: 1
+  outlierDetection:
+    consecutiveErrors: 1
+    interval: 1s
+    baseEjectionTime: 3m
+    maxEjectionPercent: 100
   subsets:
   - name: v1
     labels:
