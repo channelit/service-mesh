@@ -9,7 +9,7 @@ Jaeger: http://localhost:16686
 Prometheus: http://localhost:9090
 Graphana: http://localhost:3001
 Keycloak: http://localhost:8080
-Locsust: http://localhost:8089/
+Locust: http://localhost:8089/
 
 ## Run Locust locally (won't work unless mapped localhost)
 
